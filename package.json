@@ -1,0 +1,25 @@
+{
+  "name": "makebom",
+  "version": "0.0.1",
+  "description": "A simple way to generate cyclonedx software bill of materials using cyclonedx/bom. This only supports json.",
+  "main": "bin/index.js",
+  "bin": {
+    "makebom": "bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "software",
+    "bill",
+    "of",
+    "materials"
+  ],
+  "author": "Evan X. Merz",
+  "license": "ISC",
+  "dependencies": {
+    "@cyclonedx/bom": "^3.7.0",
+    "commander": "^9.2.0",
+    "process": "^0.11.10"
+  }
+}
