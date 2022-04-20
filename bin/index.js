@@ -1,5 +1,6 @@
 #! /usr/bin/env node
 const fs = require('fs');
+const path = require('path');
 const process = require('process');
 const commander = require('commander');
 const program = require('../package.json');
@@ -22,14 +23,22 @@ const cyclonedxbom = require('cyclonedx-bom-programmatic');
   be run from another piece of code.
 */
 
-function makeBom(inputFolderPath, outputFilePath) {
-  let json = ""; // this will eventually hold our output
-
+function makeBomFromFile(inputFolderPath, outputFilePath) {
   // get the project path or use the current directory  
-  let filePath = inputFolderPath || '.';
-  if (!fs.existsSync(filePath)) {
+  let folderPath = inputFolderPath || '.';
+
+  if (!fs.existsSync(folderPath)) {
     throw new Error('Folder path does not exist');
   }
+
+  const fullPath = path.join(folderPath, "package-lock.json");
+  const packageLockContent = fs.readFileSync(fullPath, 'utf8');
+
+  return makeBom(packageLockContent, outputFilePath);
+}
+
+function makeBom(packageLockContent, outputFilePath) {
+  let json = ""; // this will eventually hold our output
 
   // set some default options just in case this was invoked programmatically
   let options = {
@@ -70,7 +79,7 @@ function makeBom(inputFolderPath, outputFilePath) {
     than a return value, but it's not an asynchronous method. So, in order to
     avoid changing the underlying library, we are working around that call pattern.
   */
-  cyclonedxbom.createbom(options.type, options.serialNumber, options.includeLicenseText, filePath, readInstalledOptions, (createbomError, bom) => {
+  cyclonedxbom.createbomFromText(options.type, options.serialNumber, options.includeLicenseText, packageLockContent, readInstalledOptions, (createbomError, bom) => {
     if (createbomError) {
       throw createbomError;
     }
@@ -91,7 +100,10 @@ function makeBom(inputFolderPath, outputFilePath) {
   
     // save the json and render a file
     json = bom.toJSON();
-    fs.writeFile(options.output, json, writeFileCB)
+
+    if (require.main === module) {
+      fs.writeFile(options.output, json, writeFileCB)
+    }
   });
 
   return json;
@@ -100,10 +112,11 @@ function makeBom(inputFolderPath, outputFilePath) {
 
 module.exports = {
   makeBom,
+  makeBomFromFile,
 };
 
 // If called using npx, then run viewBom. Otherwise, do nothing
 // See https://stackoverflow.com/questions/6398196/detect-if-called-through-require-or-directly-by-command-line
 if (require.main === module) {
-  makeBom();
+  makeBomFromFile();
 }
