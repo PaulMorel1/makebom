@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/PaulMorel1/makebom.git",
   "dependencies": {
-    "@cyclonedx/bom": "^3.7.0",
     "commander": "^9.2.0",
+    "cyclonedx-bom-programmatic": "github:PaulMorel1/cyclonedx-bom-programmatic",
     "process": "^0.11.10"
   }
 }

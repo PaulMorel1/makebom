@@ -2,8 +2,13 @@
 const fs = require('fs');
 const process = require('process');
 const commander = require('commander');
-const cyclonedxbom = require('@cyclonedx/bom');
 const program = require('../package.json');
+
+/*
+  The original package does not support programmatic invocation.
+*/
+// const cyclonedxbom = require('@cyclonedx/bom');
+const cyclonedxbom = require('cyclonedx-bom-programmatic');
 
 /*
   makeBom
@@ -93,9 +98,9 @@ function makeBom(inputFolderPath, outputFilePath) {
 }
 
 
-module.exports = [
+module.exports = {
   makeBom,
-];
+};
 
 // If called using npx, then run viewBom. Otherwise, do nothing
 // See https://stackoverflow.com/questions/6398196/detect-if-called-through-require-or-directly-by-command-line
