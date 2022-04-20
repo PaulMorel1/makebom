@@ -17,6 +17,11 @@
   ],
   "author": "Evan X. Merz",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PaulMorel1/makebom.git"
+  },
+  "homepage": "https://github.com/PaulMorel1/makebom.git",
   "dependencies": {
     "@cyclonedx/bom": "^3.7.0",
     "commander": "^9.2.0",
